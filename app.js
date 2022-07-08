@@ -1,68 +1,93 @@
-"use strict";
-const department = ["Administration", "Marketing", "Development", "Finance"]
-const level = ["Junior", "Mid-Senior", "Senior"]
-const allEmp =[];
+' use strict'
+let allEmployeeObject = [];
 
-const tax = 7.5 / 100;
-
-const netSalary = salary => {
-  return salary - (salary * tax)
-};
-
-const salary = ({ max, min }) => {
-  return Math.floor(Math.random() * (max - min)) + min;
-};
-
-const limits = level => {
-  switch (level) {
-    case "Senior": return salary({ max: 2000, min: 1500 });
-    case "Mid-Senior": return salary({ max: 1500, min: 1000 });
-    case "Junior": return salary({ max: 1000, min: 500 });
-    default: return salary({ max: 0, min: 0 });
-  }
-};
-
-
-function employeeId(){
-    return Math.floor(Math.random() * 10000);
-    };
-
-function Employee(fullName, department, level, image){
-
-    this.employeeId = employeeId();
-    this.name = fullName;
-    this.department= department;
-    this.level = level; 
-    this.image = image;
-    this.salary = netSalary(limits(level)); 
-    allEmp.push(this);
-
-}
-
-Employee.prototype.fullsalary = function(){
-    console.log(`${this.name} : ${this.salary} `);
-    document.write( `
-        <tr>
-        <td>${this.employeeId}&nbsp;&nbsp;&nbsp;</td>
-        <td>${this.name}&nbsp;&nbsp;&nbsp;</td>
-        <td>${this.department}&nbsp;&nbsp;&nbsp;</td>
-        <td>${this.level}&nbsp;&nbsp;&nbsp;</td>  \n <p>
-        </tr>
-        `
-        )
+function Employee(employeeID, fullName, department, level, empImage) {
+    this.employeeID = employeeID;
+    this.fullName = fullName;
+    this.department = department 
+    this.level = level 
+    this.empImage = empImage;
     
+    this.salary();
+
+    allEmployeeObject.push(this);
+}
+
+let department = ["Administration", "Marketing", "Development", "Finance"];
+let level = ["Junior", "Mid-Senior", "Senior"];
+
+let emplooyesDiv = document.getElementById("emplooyes");
+
+Employee.prototype.render = function () {
+    let emp = document.createElement("div");
+    
+    emp.innerHTML = `
+        <img alt="img" src="${this.empImage}" width="150" height="150">
+        <div class="info">
+            <h5>Id: ${this.employeeID}</h5>
+            <h5>Name: ${this.fullName}</h5>
+            <h5>Depaertment: ${this.department}</h5>
+            <h5>Level: ${this.level}</h5>
+            <h5>Salary: ${this.salary}</h5>
+        </div>
+    `;
+
+    emp.className = "emp";
+    emplooyesDiv.appendChild(emp);
+};
+
+function getData() {
+    var data = localStorage.getItem("emplooyes");
+    if (!data) return;
+    let parsedData = JSON.parse(data)
+    console.log(typeof data);
+    allEmployeeObject = [];
+
+    for (let i = 0; i < parsedData.length; i++) {
+        const emp = parsedData[i];
+        var newEmp = new Employee(emp.employeeID, emp.fullName, emp.department, emp.level, emp.empImage);
+        newEmp.render();
+    }
+}
+
+Employee.prototype.salary = function () {
+    if (this.level == "Senior") {
+        var sal = Math.floor(Math.random() * (2000 - 1500)) + 1500;
+        this.salary = sal - (sal * 0.075);
+    }
+    else if (this.level == "Mid-Senior") {
+        var sal = Math.floor(Math.random() * (1500 - 1000)) + 1000;
+        this.salary = sal - (sal * 0.075);
+    }
+    else {
+        var sal = Math.floor(Math.random() * (1000 - 500)) + 500;
+        this.salary = sal - (sal * 0.075);
+    }
+}
+getData();
+
+if (allEmployeeObject.length == 0) {
+    let ghaziEmployee = new Employee(1000, "Ghazi Samer", department[0], level[2], '.\\images\\Ghazi.jpg');
+    let lanaEmployee = new Employee(1001, "Lana Ali", department[3], level[2], ".\\images\\Lana.jpg");
+    let tamaraEmployee = new Employee(1002, "Tamara Ayoub", department[1], level[2], ".\\images\\Tamara.jpg");
+    let saifEmployee = new Employee(1003, "Safi Walid", department[0], level[1], ".\\images\\Safi.jpg");
+    let omarEmployee = new Employee(1004, "Omar Zaid", department[2], level[2], ".\\images\\Omar.jpg");
+    let ranaEmployee = new Employee(1005, "Rana Saleh", department[2], level[0], ".\\images\\Rana.jpg");
+    let hadiEmployee = new Employee(1006, "Hadi Ahmad", department[3], level[1], ".\\images\\Hadi.jpg");
+
+    ghaziEmployee.render();
+    lanaEmployee.render();
+    tamaraEmployee.render();
+    saifEmployee.render();
+    omarEmployee.render();
+    ranaEmployee.render();
+    hadiEmployee.render();
+
+   
+}
+var getRandomId = function () {
+    return Math.floor(Math.random() * 10000);
 }
 
 
-const emp1 = new Employee("Ali Mohammad",department[1],level[2],"./ASAC.jpg");
-const emp2 = new Employee("Omar Mohammad",department[0],level[0],"./ASAC.jpg");
-const emp3 = new Employee("Zaid Rawajbeh",department[2],level[1],"./ASAC.jpg");
-const emp4 = new Employee("Salah Rawajbeh",department[1],level[1],"./ASAC.jpg");
-const emp5 = new Employee("Mohammad Rawajbeh",department[0],level[2],"./ASAC.jpg");
-console.log(emp1);   
-/* emp1.fullsalary(); */  
-
-for(let i=0; i < allEmp.length; i++){
-    allEmp[i].fullsalary();
-}
 
