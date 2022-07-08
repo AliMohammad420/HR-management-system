@@ -39,8 +39,23 @@ ul {
      { 
         color: blue;
      }
-
-        table, th, td {
-            
-            border: 1px solid;
-          }
+  
+  
+  .container{
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: center;
+  }
+  .emp{
+    width: 30%;
+    text-align: center;
+    margin: 1%;
+    margin-top: 5%;
+  }
+  
+  .info{
+    background-color: #e2d4f9;
+    padding: 10px;
+    
+  }
